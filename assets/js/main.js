@@ -3,30 +3,47 @@ document.addEventListener("DOMContentLoaded", function () {
   const publications = [
     {
       id: 1,
-      title: "Efficient Training with Limited Data: A Practical Framework",
-      authors: "张三, Li Wei",
-      venue: "IEEE Transactions on Pattern Analysis",
-      year: 2023,
-      link: "https://example.org/1",
-      abstract: "在数据受限场景下提出一种高效训练框架，提升模型泛化能力。",
+      title:
+        "Context-specific expression quantitative trait loci dynamics uncover genetic pleiotropy in schizophrenia",
+      authors: "叶林燕, 沈宗锐, 杨奇",
+      venue: "Neurobiology of Disease",
+      year: 2025,
+      link: "https://doi.org/10.1016/j.nbd.2025.107236",
+      abstract:
+        "构建多情境脑组织表达数量性状位点（ eQTL）动态图谱，系统揭示了遗传调控在精神分裂症中的“情境特异性”，并阐明了一种由基因竞争共享调控元件所驱动的遗传多效性新机制",
     },
     {
       id: 2,
-      title: "A Novel Graph Neural Network for Link Prediction",
-      authors: "赵倩, 王强",
-      venue: "NeuroComputing Letters",
-      year: 2024,
-      link: "https://example.org/2",
-      abstract: "提出一种新型图神经网络用于链接预测，提升准确率与可解释性。",
+      title:
+        "Allele‐Specific Methylation Links Non‐coding Variant of rs2280906 to MYOM2 Regulation in Schizophrenia",
+      authors: "李启阳、盖元元、李忠炜",
+      venue: "Molecular Neurobiology",
+      year: 2025,
+      link: "https://link.springer.com/article/10.1007/s12035-025-05469-1",
+      abstract:
+        "利用孟德尔随机化整合ASM、脑组织表达数量性状位点（eQTL）及精神分裂症GWAS数据，鉴定ASM位点所调控的精神分裂症风险基因集，并揭示了ASM位点rs2280906调控疾病风险基因MYOM2 的表达参与精神分裂症的调控机制",
     },
     {
       id: 3,
-      title: "Diffusion Models in Biomedical Imaging",
-      authors: "Liu X., Chen Y.",
-      venue: "BioMed Open Journal",
-      year: 2022,
-      link: "https://example.org/3",
-      abstract: "将扩散模型应用于生物医学成像，改善重建质量与鲁棒性。",
+      title:
+        "Mendelian randomization facilitates identification of schizophrenia risk enhancer RNAs",
+      authors: "叶林燕,倪超颖",
+      venue: "Molecular Psychiatry",
+      year: 2025,
+      link: "https://www.nature.com/articles/s41380-025-03358-6",
+      abstract:
+        "该研究通过构建大规模增强子RNA表达数量性状位点（eQTL）图谱，并结合孟德尔随机化分析，揭示了增强子RNA在SZ发病风险中的因果作用及其调控机制。",
+    },
+    {
+      id: 4,
+      title:
+        "Gain of Alternative Allele Expression of LINC02449 at rs149707223 in Schizophrenia and Bipolar Disorder: Inducing Synaptic Transmission and Behavioral Deficits in Mice",
+      authors: "杨腾飞、陈恰琪、邓志颖、倪超颖、刘津铭",
+      venue: "Nature Communications",
+      year: 2025,
+      link: "https://doi.org/10.1038/s41467-025-64717-z",
+      abstract:
+        "详细阐述了LINC02449在位点rs149707223上的等位基因特异性表达如何激活小鼠的mPFC-NAc神经环路，诱导小鼠突触传递和行为异常，揭示了从非编码遗传变异到行为异常——等位基因特异性表达参与精神疾病的新机制",
     },
   ];
 
@@ -56,7 +73,7 @@ document.addEventListener("DOMContentLoaded", function () {
       el.innerHTML = `
         <h3><a href="${p.link}" target="_blank" rel="noopener">${p.title}</a></h3>
         <div class="pub-meta">${p.authors} — ${p.venue} (${p.year})</div>
-        <p class="pub-abstract" style="font-size:0.92rem;margin-top:6px;color:#374151;">${p.abstract}</p>
+        <p class="pub-abstract">${p.abstract}</p>
       `;
       container.appendChild(el);
     });

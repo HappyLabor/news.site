@@ -4,12 +4,21 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>HappyLab</title>
+    <link rel="icon" href="images/logo.jpg" type="image/jpg" />
     <link rel="stylesheet" href="assets/css/styles.css" />
   </head>
   <body>
     <header class="site-header">
       <div class="container header-inner">
-        <div class="brand">HappyLab</div>
+        <a href="#" class="logo-group">
+          <img
+            class="img-logo"
+            src="images/logo.jpg"
+            alt="HappyLab 标志"
+            height="40"
+          />
+          <div class="brand">HappyLab</div>
+        </a>
         <nav class="nav" aria-label="主导航">
           <a href="#about">关于我们</a>
           <a href="#publications">发表文章</a>
@@ -31,9 +40,29 @@
     <section id="about" class="section">
       <div class="container">
         <h2>关于我们</h2>
-        <p>
-          在这里简要介绍实验室定位、研究方向、所在机构及研究愿景。替换为你自己的信息即可。
-        </p>
+        <p>在这里简要介绍实验室定位、研究方向、所在机构及研究愿景。</p>
+      </div>
+    </section>
+
+    <section id="news" class="section">
+      <div class="container">
+        <details open>
+          <summary style="cursor: pointer"><h2>实验室动态</h2></summary>
+          <ul class="news-list">
+            <li>
+              <span class="news-date">2024-01-15</span>
+              <span class="news-item">实验室获得国家自然科学基金资助。</span>
+            </li>
+            <li>
+              <span class="news-date">2023-12-10</span>
+              <span class="news-item">团队成员在国际会议上发表演讲。</span>
+            </li>
+            <li>
+              <span class="news-date">2023-11-05</span>
+              <span class="news-item">实验室新成员加入，欢迎他们！</span>
+            </li>
+          </ul>
+        </details>
       </div>
     </section>
 
@@ -58,9 +87,9 @@
       <div class="container">
         <h2>研究方向</h2>
         <ul class="grid-3">
-          <li>方向一：简要描述研究主题和应用领域。</li>
-          <li>方向二：多学科融合与方法创新。</li>
-          <li>方向三：与产业应用的衔接与转化。</li>
+          <li>方向一：</li>
+          <li>方向二：</li>
+          <li>方向三：</li>
         </ul>
       </div>
     </section>
@@ -78,18 +107,24 @@
 
     <section id="contact" class="section">
       <div class="container">
-        <h2>联系</h2>
-        <form class="contact-form" onsubmit="return false;">
-          <input type="text" placeholder="您的姓名" required />
-          <input type="email" placeholder="邮箱" required />
-          <textarea placeholder="留言内容" required></textarea>
-          <button type="submit" class="btn">发送</button>
-        </form>
+        <h2>联系我们</h2>
+        <div class="contact-wrapper">
+          <div class="contact-info">
+            <p>
+              <strong>地址：</strong><br />XX省XX市XX区XX路XX号<br />HappyLab
+              实验室
+            </p>
+            <p><strong>邮箱：</strong><br />contact@happylab.org</p>
+            <p><strong>电话：</strong><br />+86 10-1234-5678</p>
+            <p><strong>微信公众号：</strong><br />HappyLaboratory</p>
+          </div>
+        </div>
       </div>
     </section>
 
     <footer class="site-footer">
-      <div class="container">© 2026 实验室名. 保留所有权利。</div>
+      <div class="container">© 2026 HappyLab. 保留所有权利。</div>
+      <div class="container">联系邮箱:xxxx@gmail.com</div>
     </footer>
 
     <script src="assets/js/main.js"></script>
