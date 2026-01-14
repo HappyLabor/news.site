@@ -97,4 +97,14 @@ document.addEventListener("DOMContentLoaded", function () {
   document.getElementById("pub-year").addEventListener("change", applyFilters);
 
   renderList(publications);
+
+  // Mobile Menu Toggle
+  const menuToggle = document.querySelector(".mobile-menu-toggle");
+  const nav = document.querySelector(".nav");
+
+  if (menuToggle && nav) {
+    menuToggle.addEventListener("click", () => {
+      nav.classList.toggle("is-open");
+    });
+  }
 });
