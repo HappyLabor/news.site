@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
-  // 示例数据：请将此处数据替换为你的实际发表文章信息
+  //请将此处数据替换为你的实际发表文章信息
   const publications = [
     {
       id: 1,
@@ -44,6 +44,17 @@ document.addEventListener("DOMContentLoaded", function () {
       link: "https://doi.org/10.1038/s41467-025-64717-z",
       abstract:
         "详细阐述了LINC02449在位点rs149707223上的等位基因特异性表达如何激活小鼠的mPFC-NAc神经环路，诱导小鼠突触传递和行为异常，揭示了从非编码遗传变异到行为异常——等位基因特异性表达参与精神疾病的新机制",
+    },
+    {
+      id: 5,
+      title:
+        "Allele-Specific Regulation of PAXIP1-AS1 by SMC3/CEBPB at rs112651172 in Psychiatric Disorders Drives Synaptic and Behavioral Dysfunctions in Mice",
+      authors: "倪超颖、陈鹤、陈洽琪、廖扬阳",
+      venue: "Advanced Science",
+      year: 2025,
+      link: "https://advanced.onlinelibrary.wiley.com/doi/10.1002/advs.202508259",
+      abstract:
+        "揭示了非编码遗传变异通过等位基因特异性调控长链非编码RNA（lncRNA）PAXIP1-AS1，驱动突触功能紊乱与精神障碍表型",
     },
   ];
 
@@ -97,4 +108,83 @@ document.addEventListener("DOMContentLoaded", function () {
   document.getElementById("pub-year").addEventListener("change", applyFilters);
 
   renderList(publications);
+
+  /* --- VS Code Assistant Added: Mobile Menu & Visual Enhancements --- */
+
+  // Mobile Menu Logic
+  const menuToggle = document.querySelector(".menu-toggle");
+  const nav = document.querySelector(".nav");
+
+  if (menuToggle && nav) {
+    menuToggle.addEventListener("click", (e) => {
+      e.stopPropagation();
+      nav.classList.toggle("active");
+      menuToggle.classList.toggle("active");
+    });
+
+    // Close menu when clicking outside
+    document.addEventListener("click", (e) => {
+      if (!nav.contains(e.target) && !menuToggle.contains(e.target)) {
+        nav.classList.remove("active");
+        menuToggle.classList.remove("active");
+      }
+    });
+
+    // Close menu when clicking a link (smooth scroll behavior)
+    nav.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", () => {
+        nav.classList.remove("active");
+        menuToggle.classList.remove("active");
+      });
+    });
+  }
+
+  // Scroll Reveal Logic
+  const observerOptions = {
+    threshold: 0.1,
+    rootMargin: "0px 0px -50px 0px",
+  };
+
+  const observer = new IntersectionObserver((entries, obs) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("is-visible");
+        obs.unobserve(entry.target);
+      }
+    });
+  }, observerOptions);
+
+  const observeElements = (elements) => {
+    elements.forEach((el, index) => {
+      el.classList.add("reveal-on-scroll");
+      // Add stagger delay for lists
+      if (el.classList.contains("pub-item") || el.tagName === "LI") {
+        el.style.transitionDelay = `${(index % 5) * 100}ms`;
+      }
+      observer.observe(el);
+    });
+  };
+
+  // Select key structural elements to animate
+  const staticSelectors = document.querySelectorAll(
+    "section h2, .card, .hero-content > *, .grid-3 li, .contact-wrapper, .news-list li"
+  );
+  observeElements(staticSelectors);
+
+  // Initial publication items
+  observeElements(document.querySelectorAll(".pub-item"));
+
+  // Monitor dynamic publication list changes (for search/filter)
+  const pubList = document.getElementById("pub-list");
+  if (pubList) {
+    const mutationObserver = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        const newNodes = Array.from(mutation.addedNodes).filter(
+          (n) => n.nodeType === 1
+        );
+        if (newNodes.length > 0) observeElements(newNodes);
+      });
+    });
+    mutationObserver.observe(pubList, { childList: true });
+  }
 });
