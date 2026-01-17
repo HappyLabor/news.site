@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
-  //请将此处数据替换为你的实际发表文章信息
+  // --- 数据部分 ---
   const publications = [
     {
       id: 1,
@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
       year: 2025,
       link: "https://doi.org/10.1016/j.nbd.2025.107236",
       abstract:
-        "构建多情境脑组织表达数量性状位点（ eQTL）动态图谱，系统揭示了遗传调控在精神分裂症中的“情境特异性”，并阐明了一种由基因竞争共享调控元件所驱动的遗传多效性新机制",
+        "构建多情境脑组织表达数量性状位点（eQTL）动态图谱，系统揭示了遗传调控在精神分裂症中的“情境特异性”，并阐明了一种由基因竞争共享调控元件所驱动的遗传多效性新机制。",
     },
     {
       id: 2,
@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
       year: 2025,
       link: "https://link.springer.com/article/10.1007/s12035-025-05469-1",
       abstract:
-        "利用孟德尔随机化整合ASM、脑组织表达数量性状位点（eQTL）及精神分裂症GWAS数据，鉴定ASM位点所调控的精神分裂症风险基因集，并揭示了ASM位点rs2280906调控疾病风险基因MYOM2 的表达参与精神分裂症的调控机制",
+        "利用孟德尔随机化整合ASM、脑组织表达数量性状位点（eQTL）及精神分裂症GWAS数据，鉴定ASM位点所调控的精神分裂症风险基因集，并揭示了ASM位点rs2280906调控疾病风险基因MYOM2 的表达参与精神分裂症的调控机制。",
     },
     {
       id: 3,
@@ -37,62 +37,81 @@ document.addEventListener("DOMContentLoaded", function () {
     {
       id: 4,
       title:
-        "Gain of Alternative Allele Expression of LINC02449 at rs149707223 in Schizophrenia and Bipolar Disorder: Inducing Synaptic Transmission and Behavioral Deficits in Mice",
-      authors: "杨腾飞、陈恰琪、邓志颖、倪超颖、刘津铭",
+        "Gain of Alternative Allele Expression of LINC02449 at rs149707223 in Schizophrenia and Bipolar Disorder",
+      authors: "杨腾飞、陈恰琪、邓志颖",
       venue: "Nature Communications",
       year: 2025,
       link: "https://doi.org/10.1038/s41467-025-64717-z",
       abstract:
-        "详细阐述了LINC02449在位点rs149707223上的等位基因特异性表达如何激活小鼠的mPFC-NAc神经环路，诱导小鼠突触传递和行为异常，揭示了从非编码遗传变异到行为异常——等位基因特异性表达参与精神疾病的新机制",
+        "详细阐述了LINC02449在位点rs149707223上的等位基因特异性表达如何激活小鼠的mPFC-NAc神经环路，诱导小鼠突触传递和行为异常。",
     },
     {
       id: 5,
       title:
-        "Allele-Specific Regulation of PAXIP1-AS1 by SMC3/CEBPB at rs112651172 in Psychiatric Disorders Drives Synaptic and Behavioral Dysfunctions in Mice",
-      authors: "倪超颖、陈鹤、陈洽琪、廖扬阳",
+        "Allele-Specific Regulation of PAXIP1-AS1 by SMC3/CEBPB at rs112651172 in Psychiatric Disorders",
+      authors: "倪超颖、陈鹤",
       venue: "Advanced Science",
       year: 2025,
       link: "https://advanced.onlinelibrary.wiley.com/doi/10.1002/advs.202508259",
       abstract:
-        "揭示了非编码遗传变异通过等位基因特异性调控长链非编码RNA（lncRNA）PAXIP1-AS1，驱动突触功能紊乱与精神障碍表型",
+        "揭示了非编码遗传变异通过等位基因特异性调控长链非编码RNA（lncRNA）PAXIP1-AS1，驱动突触功能紊乱与精神障碍表型。",
     },
   ];
 
-  // 初始化年份选择框
+  // --- 论文渲染逻辑 ---
+  const pubListContainer = document.getElementById("pub-list");
   const yearSel = document.getElementById("pub-year");
-  const years = Array.from(new Set(publications.map((p) => p.year))).sort(
-    (a, b) => b - a
-  );
-  years.forEach((y) => {
-    const opt = document.createElement("option");
-    opt.value = String(y);
-    opt.textContent = String(y);
-    yearSel.appendChild(opt);
-  });
+  const searchInput = document.getElementById("pub-search");
+
+  // 初始化年份下拉框
+  if (yearSel) {
+    const years = Array.from(new Set(publications.map((p) => p.year))).sort(
+      (a, b) => b - a
+    );
+    years.forEach((y) => {
+      const opt = document.createElement("option");
+      opt.value = String(y);
+      opt.textContent = String(y);
+      yearSel.appendChild(opt);
+    });
+  }
 
   function renderList(items) {
-    const container = document.getElementById("pub-list");
-    container.innerHTML = "";
+    if (!pubListContainer) return;
+    pubListContainer.innerHTML = "";
+
     if (items.length === 0) {
-      container.innerHTML =
-        '<div class="pub-item">未检索到符合条件的结果。</div>';
+      pubListContainer.innerHTML =
+        '<div style="padding:20px; color:#7F8C8D;">未检索到符合条件的结果。</div>';
       return;
     }
+
     items.forEach((p) => {
       const el = document.createElement("div");
       el.className = "pub-item";
+      // 点击标题触发 Modal，而不是直接跳转
       el.innerHTML = `
-        <h3><a href="${p.link}" target="_blank" rel="noopener">${p.title}</a></h3>
-        <div class="pub-meta">${p.authors} — ${p.venue} (${p.year})</div>
-        <p class="pub-abstract">${p.abstract}</p>
+        <h3><a href="javascript:void(0)" class="pub-link" data-id="${p.id}">${p.title}</a></h3>
+        <div class="pub-meta">${p.authors} — <span style="font-weight:600; color:var(--primary);">${p.venue}</span> (${p.year})</div>
       `;
-      container.appendChild(el);
+      pubListContainer.appendChild(el);
+    });
+
+    // 绑定点击事件到标题
+    document.querySelectorAll(".pub-link").forEach((link) => {
+      link.addEventListener("click", (e) => {
+        const pubId = e.target.getAttribute("data-id");
+        const pub = publications.find((p) => p.id == pubId);
+        openModal(pub);
+      });
     });
   }
 
   function applyFilters() {
-    const q = (document.getElementById("pub-search").value || "").toLowerCase();
-    const year = document.getElementById("pub-year").value;
+    if (!searchInput || !yearSel) return;
+    const q = searchInput.value.toLowerCase();
+    const year = yearSel.value;
+
     const filtered = publications.filter((p) => {
       const byYear = year === "all" || p.year === parseInt(year);
       const byText =
@@ -104,14 +123,64 @@ document.addEventListener("DOMContentLoaded", function () {
     renderList(filtered);
   }
 
-  document.getElementById("pub-search").addEventListener("input", applyFilters);
-  document.getElementById("pub-year").addEventListener("change", applyFilters);
+  if (searchInput) searchInput.addEventListener("input", applyFilters);
+  if (yearSel) yearSel.addEventListener("change", applyFilters);
 
+  // 初始渲染
   renderList(publications);
 
-  /* --- VS Code Assistant Added: Mobile Menu & Visual Enhancements --- */
+  // --- Modal 弹窗逻辑 ---
+  const modal = document.getElementById("abstract-modal");
+  const closeBtn = document.querySelector(".close-modal");
+  const modalTitle = document.getElementById("modal-title");
+  const modalMeta = document.getElementById("modal-meta");
+  const modalText = document.getElementById("modal-text");
+  const modalLink = document.getElementById("modal-link");
 
-  // Mobile Menu Logic
+  function openModal(pub) {
+    if (!modal) return;
+    modalTitle.textContent = pub.title;
+    modalMeta.textContent = `${pub.authors} | ${pub.venue} (${pub.year})`;
+    modalText.textContent = pub.abstract;
+    modalLink.href = pub.link;
+    modal.style.display = "flex";
+  }
+
+  if (closeBtn) {
+    closeBtn.onclick = () => (modal.style.display = "none");
+  }
+
+  window.onclick = (event) => {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  };
+
+  // --- 实习表单提交模拟 ---
+  const contactForm = document.querySelector(".contact-form");
+  if (contactForm) {
+    contactForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const btn = contactForm.querySelector('button[type="submit"]');
+      const originalText = btn.textContent;
+
+      // 改变按钮状态
+      btn.textContent = "提交中...";
+      btn.style.opacity = "0.7";
+      btn.disabled = true;
+
+      // 模拟网络请求
+      setTimeout(() => {
+        alert("申请提交成功！我们会尽快通过邮件联系您。");
+        contactForm.reset();
+        btn.textContent = originalText;
+        btn.style.opacity = "1";
+        btn.disabled = false;
+      }, 1500);
+    });
+  }
+
+  // --- 移动端菜单逻辑 ---
   const menuToggle = document.querySelector(".menu-toggle");
   const nav = document.querySelector(".nav");
 
@@ -119,72 +188,62 @@ document.addEventListener("DOMContentLoaded", function () {
     menuToggle.addEventListener("click", (e) => {
       e.stopPropagation();
       nav.classList.toggle("active");
-      menuToggle.classList.toggle("active");
     });
 
-    // Close menu when clicking outside
     document.addEventListener("click", (e) => {
       if (!nav.contains(e.target) && !menuToggle.contains(e.target)) {
         nav.classList.remove("active");
-        menuToggle.classList.remove("active");
       }
-    });
-
-    // Close menu when clicking a link (smooth scroll behavior)
-    nav.querySelectorAll("a").forEach((link) => {
-      link.addEventListener("click", () => {
-        nav.classList.remove("active");
-        menuToggle.classList.remove("active");
-      });
     });
   }
 
-  // Scroll Reveal Logic
-  const observerOptions = {
-    threshold: 0.1,
-    rootMargin: "0px 0px -50px 0px",
-  };
-
-  const observer = new IntersectionObserver((entries, obs) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add("is-visible");
-        obs.unobserve(entry.target);
-      }
-    });
-  }, observerOptions);
+  // --- 滚动显现动画 (Scroll Reveal) ---
+  const observer = new IntersectionObserver(
+    (entries, obs) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          obs.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.1 }
+  );
 
   const observeElements = (elements) => {
-    elements.forEach((el, index) => {
-      el.classList.add("reveal-on-scroll");
-      // Add stagger delay for lists
-      if (el.classList.contains("pub-item") || el.tagName === "LI") {
-        el.style.transitionDelay = `${(index % 5) * 100}ms`;
-      }
+    elements.forEach((el) => {
+      el.style.opacity = "0";
+      el.style.transform = "translateY(20px)";
+      el.style.transition = "opacity 0.6s ease, transform 0.6s ease";
+
+      // 添加一个类来触发上述 transition
+      // 注意：我们在CSS中没有定义 .is-visible 的具体样式，而是利用 JS 直接控制 style
+      // 为了更清洁的代码，这里动态添加 transition 逻辑
       observer.observe(el);
     });
   };
 
-  // Select key structural elements to animate
-  const staticSelectors = document.querySelectorAll(
-    "section h2, .card, .hero-content > *, .grid-3 li, .contact-wrapper, .news-list li"
-  );
-  observeElements(staticSelectors);
-
-  // Initial publication items
-  observeElements(document.querySelectorAll(".pub-item"));
-
-  // Monitor dynamic publication list changes (for search/filter)
-  const pubList = document.getElementById("pub-list");
-  if (pubList) {
-    const mutationObserver = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        const newNodes = Array.from(mutation.addedNodes).filter(
-          (n) => n.nodeType === 1
-        );
-        if (newNodes.length > 0) observeElements(newNodes);
+  // 修改 Observer 回调以配合内联样式
+  const revealObserver = new IntersectionObserver(
+    (entries, obs) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = "1";
+          entry.target.style.transform = "translateY(0)";
+          obs.unobserve(entry.target);
+        }
       });
-    });
-    mutationObserver.observe(pubList, { childList: true });
-  }
+    },
+    { threshold: 0.1 }
+  );
+
+  const animatedElements = document.querySelectorAll(
+    ".section, .hero-banner, .sidebar-sticky"
+  );
+  animatedElements.forEach((el) => {
+    el.style.opacity = "0";
+    el.style.transform = "translateY(20px)";
+    el.style.transition = "opacity 0.6s ease-out, transform 0.6s ease-out";
+    revealObserver.observe(el);
+  });
 });

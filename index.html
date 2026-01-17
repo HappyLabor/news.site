@@ -1,22 +1,22 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>HappyLab</title>
-    <link rel="icon" href="images/logo.jpg" type="image/jpg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Open+Sans:wght@300;400;600&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="assets/css/styles.css" />
   </head>
   <body>
     <header class="site-header">
-      <div class="container header-inner">
+      <div class="header-inner container">
         <a href="#" class="logo-group">
-          <img
-            class="img-logo"
-            src="images/logo.jpg"
-            alt="HappyLab 标志"
-            height="40"
-          />
+          <img class="img-logo" src="images/logo.jpg" alt="HappyLab 标志" />
           <div class="brand">HappyLab</div>
         </a>
         <button class="menu-toggle" aria-label="切换导航">
@@ -25,127 +25,187 @@
           <span></span>
         </button>
         <nav class="nav" aria-label="主导航">
-          <a href="#about">关于我们</a>
-          <a href="#publications">发表文章</a>
+          <a href="#">首页</a>
           <a href="#research">研究方向</a>
-          <a href="#people">团队</a>
-          <a href="#contact">联系</a>
+          <a href="#people">团队成员</a>
+          <a href="#publications">发表文章</a>
+          <a href="#internship" class="nav-highlight">申请实习</a>
         </nav>
       </div>
     </header>
 
-    <section class="hero" aria-label="欢迎">
-      <div class="container hero-content">
-        <h1>欢迎来到 "HappyLab"</h1>
-        <p>专注领域研究与高质量学术产出，分享已发表文章与实验室动态。</p>
-        <a class="btn" href="#publications">查看已发表文章</a>
-      </div>
-    </section>
+    <div class="container main-layout">
+      <aside class="sidebar">
+        <div class="sidebar-sticky">
+          <div class="sidebar-group">
+            <h3>快速导航</h3>
+            <ul class="side-nav">
+              <li><a href="#research">🔬 研究方向</a></li>
+              <li><a href="#people">👥 核心团队</a></li>
+              <li><a href="#publications">📄 最新发表</a></li>
+              <li><a href="#internship">🎓 招募计划</a></li>
+            </ul>
+          </div>
+        </div>
+      </aside>
+      <main class="content-area">
+        <section class="hero-banner">
+          <div class="hero-content">
+            <h1>探索生命科学的前沿</h1>
+            <p>
+              HappyLab
+              致力于神经科学与基因组学的交叉研究，寻找治疗精神疾病的新靶点。
+            </p>
+            <a href="#publications" class="btn btn-primary">查看研究成果</a>
+          </div>
+        </section>
 
-    <section id="about" class="section">
-      <div class="container">
-        <h2>关于我们</h2>
-        <p>在这里简要介绍实验室定位、研究方向、所在机构及研究愿景。</p>
-      </div>
-    </section>
-
-    <section id="news" class="section">
-      <div class="container">
-        <details open>
-          <summary style="cursor: pointer"><h2>实验室动态</h2></summary>
-          <ul class="news-list">
+        <section id="research" class="section">
+          <div class="section-header">
+            <h2>研究方向</h2>
+          </div>
+          <ul class="grid-3 research-grid">
             <li>
-              <span class="news-date">2024-01-15</span>
-              <span class="news-item">实验室获得国家自然科学基金资助。</span>
+              <h3>神经环路机制</h3>
+              <p>解析精神分裂症相关的特定神经环路功能异常与行为表型的关联。</p>
             </li>
             <li>
-              <span class="news-date">2023-12-10</span>
-              <span class="news-item">团队成员在国际会议上发表演讲。</span>
+              <h3>非编码基因组</h3>
+              <p>
+                利用全基因组测序数据，挖掘非编码区域变异在疾病中的调控作用。
+              </p>
             </li>
             <li>
-              <span class="news-date">2023-11-05</span>
-              <span class="news-item">实验室新成员加入，欢迎他们！</span>
+              <h3>转化医学应用</h3>
+              <p>开发基于新型生物标志物的早期诊断工具与干预策略。</p>
             </li>
           </ul>
-        </details>
-      </div>
+        </section>
 
-    <section id="publications" class="section">
-      <div class="container">
-        <h2>已发表文章</h2>       
-          <div class="pub-controls">
-          <input
-            type="text"
-            id="pub-search"
-            placeholder="按题名、作者、期刊等检索"
-          />
-          <select id="pub-year">
-            <option value="all">全部年份</option>
-          </select>
-        </div>
-        <div id="pub-list" class="pub-list"></div>
-      </div>
-    </section>
-
-    <section id="research" class="section">
-      <div class="container">
-        <h2>研究方向</h2>
-        <ul class="grid-3">
-          <li>方向一:
-            <br />简要描述方向一的研究内容和目标。
-          </li>
-          <li>方向二:
-            <br />简要描述方向二的研究内容和目标。
-          </li>
-          <li>方向三:
-            <br />简要描述方向三的研究内容和目标。
-          </li>
-        </ul>
-      </div>
-    </section>
-
-    <section id="people" class="section">
-      <div class="container">
-        <h2>核心成员</h2>
-        <div class="grid-people">
-          <div class="card">PI/主持人信息<br />
-            <img src="images/pi.jpg" alt="PI 照片" />
-            <div class="card-name">张三教授</div>
-            <div class="card-information">待定</div>
+        <section id="people" class="section">
+          <div class="section-header">
+            <h2>核心团队</h2>
           </div>
-          <div class="card">研究员/博士后
-            <div class="card-researchers">sgasdg</div>
-            <div class="card-post-doctor">kg</div>
+          <div class="grid-people">
+            <div class="card member-card">
+              <div class="member-photo-wrapper">
+                <img
+                  src="images/pi.jpg"
+                  alt="PI 照片"
+                  onerror="this.src = 'https://via.placeholder.com/150'"
+                />
+              </div>
+              <div class="member-info">
+                <h3>张三 教授</h3>
+                <span class="member-title">实验室 PI / 博士生导师</span>
+                <p>研究领域：精神疾病遗传学</p>
+              </div>
+            </div>
+            <div class="card member-card">
+              <div class="member-photo-wrapper">
+                <img src="https://via.placeholder.com/150" alt="研究员照片" />
+              </div>
+              <div class="member-info">
+                <h3>李四</h3>
+                <span class="member-title">副研究员</span>
+                <p>研究领域：生物信息学分析</p>
+              </div>
+            </div>
+            <div class="card member-card">
+              <div class="member-photo-wrapper">
+                <img src="https://via.placeholder.com/150" alt="学生照片" />
+              </div>
+              <div class="member-info">
+                <h3>王五</h3>
+                <span class="member-title">博士研究生</span>
+                <p>研究领域：分子生物学实验</p>
+              </div>
+            </div>
           </div>
-          <div class="card">研究生/合作成员
-            <div class="card-graduate-students">暂定</div>
-            <div class="card-collaborators">暂定</div>   
-          </div>
+        </section>
 
-        </div>
-      </div>
-    </section>
-
-    <section id="contact" class="section">
-      <div class="container">
-        <h2>联系我们</h2>
-        <div class="contact-wrapper">
-          <div class="contact-info">
-            <p>
-              <strong>地址：</strong><br />广东省广州市白云区沙太南路南方医科大学生命科学楼15楼短臂
-            </p>
-            <p><strong>邮箱：</strong><br />contact@happylab.org</p>
-            <p><strong>电话：</strong><br />+86 xxx-xxxxx</p>
-            <p><strong>微信公众号：</strong><br />HappyLaboratory</p>
+        <section id="publications" class="section">
+          <div class="section-header">
+            <h2>已发表文章</h2>
+            <div class="pub-controls">
+              <input type="text" id="pub-search" placeholder="检索文章..." />
+              <select id="pub-year">
+                <option value="all">所有年份</option>
+              </select>
+            </div>
           </div>
-        </div>
-      </div>
-    </section>
+          <div id="pub-list" class="pub-list"></div>
+        </section>
+
+        <section id="internship" class="section">
+          <div class="section-header">
+            <h2>申请实习 / 加入我们</h2>
+          </div>
+          <div class="internship-container">
+            <div class="internship-intro">
+              <p>
+                我们长期招收对神经科学感兴趣的本科生及研究生实习。请填写下方表格提交申请。
+              </p>
+            </div>
+            <form class="contact-form">
+              <div class="form-row">
+                <div class="form-group">
+                  <label>姓名</label>
+                  <input type="text" required placeholder="您的姓名" />
+                </div>
+                <div class="form-group">
+                  <label>邮箱</label>
+                  <input
+                    type="email"
+                    required
+                    placeholder="email@example.com"
+                  />
+                </div>
+              </div>
+              <div class="form-group">
+                <label>感兴趣的研究方向</label>
+                <select>
+                  <option>请选择...</option>
+                  <option>神经环路</option>
+                  <option>生物信息</option>
+                  <option>分子实验</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>个人陈述 / 留言</label>
+                <textarea
+                  rows="4"
+                  placeholder="请简述您的背景和申请理由..."
+                ></textarea>
+              </div>
+              <button type="submit" class="btn btn-accent">提交申请</button>
+            </form>
+          </div>
+        </section>
+      </main>
+    </div>
 
     <footer class="site-footer">
-      <div class="container">© 2026 HappyLab. 保留所有权利。</div>
-      <div class="container">联系邮箱:xxxx@gmail.com</div>
+      <div class="container">
+        <p>© 2026 HappyLab. 保留所有权利。</p>
+        <p>联系邮箱: contact@happylab.org | 地址: 广东省广州市...</p>
+      </div>
     </footer>
+
+    <div id="abstract-modal" class="modal-overlay" style="display: none">
+      <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <h3 id="modal-title">文章标题</h3>
+        <div class="modal-meta" id="modal-meta"></div>
+        <hr />
+        <p id="modal-text" class="modal-abstract-text"></p>
+        <div class="modal-actions">
+          <a href="#" id="modal-link" target="_blank" class="btn btn-primary"
+            >阅读原文</a
+          >
+        </div>
+      </div>
+    </div>
 
     <script src="assets/js/main.js"></script>
   </body>
