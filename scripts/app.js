@@ -1,4 +1,12 @@
 (function () {
+  var PAGE_MAP = {
+    home: "index.html",
+    research: "research.html",
+    team: "team.html",
+    join: "join.html",
+    contact: "contact.html"
+  };
+
   function getSiteData(lang) {
     return lang === "en" ? window.SITE_EN : window.SITE_ZH;
   }
@@ -16,29 +24,57 @@
       .replaceAll("'", "&#39;");
   }
 
-  function languageHref(pageKey, lang) {
-    const map = {
-      home: "index.html",
-      research: "research.html",
-      team: "team.html",
-      join: "join.html",
-      contact: "contact.html"
-    };
-    return lang === "en" ? `/en/${map[pageKey]}` : `/${map[pageKey]}`;
+  function getBasePath() {
+    if (window.location.protocol === "file:") {
+      return "";
+    }
+    return window.location.pathname.indexOf("/news.site/") === 0 ? "/news.site" : "";
+  }
+
+  function pagePath(pageKey, lang) {
+    var filename = PAGE_MAP[pageKey] || PAGE_MAP.home;
+    return lang === "en" ? "/en/" + filename : "/" + filename;
+  }
+
+  function resolveSitePath(path) {
+    if (!path || /^(?:[a-z][a-z0-9+.-]*:)?\/\//i.test(path) || path.startsWith("mailto:") || path.startsWith("tel:") || path.startsWith("#")) {
+      return path;
+    }
+    return getBasePath() + path;
+  }
+
+  function relativePageHref(pageKey, lang, currentLang) {
+    var filename = PAGE_MAP[pageKey] || PAGE_MAP.home;
+    if (currentLang === "en") {
+      return lang === "en" ? filename : "../" + filename;
+    }
+    return lang === "en" ? "en/" + filename : filename;
+  }
+
+  function pageHref(pageKey, lang, currentLang) {
+    if (window.location.protocol === "file:") {
+      return relativePageHref(pageKey, lang, currentLang);
+    }
+    return resolveSitePath(pagePath(pageKey, lang));
+  }
+
+  function languageHref(pageKey, lang, currentLang) {
+    return pageHref(pageKey, lang, currentLang);
   }
 
   function createNav(site, pageKey) {
+    var currentLang = document.body.dataset.lang || "zh";
     return site.nav
       .map(function (item) {
         const active = item.key === pageKey ? "is-active" : "";
-        return '<a class="nav-link ' + active + '" href="' + item.href + '">' + item.label + "</a>";
+        return '<a class="nav-link ' + active + '" href="' + pageHref(item.key, currentLang, currentLang) + '">' + item.label + "</a>";
       })
       .join("");
   }
 
   function createLanguageSwitch(lang, pageKey, label) {
     const targetLang = lang === "en" ? "zh" : "en";
-    return '<a class="language-switch" href="' + languageHref(pageKey, targetLang) + '">' + label + "</a>";
+    return '<a class="language-switch" href="' + languageHref(pageKey, targetLang, lang) + '">' + label + "</a>";
   }
 
   function createHero(site, papers) {
@@ -50,8 +86,8 @@
       '<p class="hero-subtitle">' + escapeHtml(site.brand.subtitle) + "</p>" +
       '<p class="hero-mission">' + escapeHtml(site.brand.mission) + "</p>" +
       '<div class="hero-actions">' +
-      '<a class="button button-primary" href="' + site.brand.ctaPrimary.href + '">' + site.brand.ctaPrimary.label + "</a>" +
-      '<a class="button button-secondary" href="' + site.brand.ctaSecondary.href + '">' + site.brand.ctaSecondary.label + "</a>" +
+      '<a class="button button-primary" href="' + resolveSitePath(site.brand.ctaPrimary.href) + '">' + site.brand.ctaPrimary.label + "</a>" +
+      '<a class="button button-secondary" href="' + resolveSitePath(site.brand.ctaSecondary.href) + '">' + site.brand.ctaSecondary.label + "</a>" +
       "</div>" +
       '<div class="stat-grid">' +
       site.heroStats
@@ -63,7 +99,7 @@
       "</div>" +
       '<div class="hero-visual">' +
       '<div class="hero-panel hero-portrait">' +
-      '<img src="' + site.faculty.image + '" alt="' + escapeHtml(site.faculty.name) + '">' +
+      '<img src="' + resolveSitePath(site.faculty.image) + '" alt="' + escapeHtml(site.faculty.name) + '">' +
       '<div class="panel-caption"><span>' + escapeHtml(site.ui.piTag) + '</span><strong>' + escapeHtml(site.faculty.name) + "</strong></div>" +
       "</div>" +
       '<div class="hero-panel hero-signal">' +
@@ -111,9 +147,10 @@
   }
 
   function createFaculty(site) {
+    var currentLang = document.body.dataset.lang || "zh";
     return (
       '<section class="content-section">' +
-      createSectionHeader("02", site.sectionLabels.faculty, site.faculty.summary, site.nav[2].href, site.buttons.learnMore) +
+      createSectionHeader("02", site.sectionLabels.faculty, site.faculty.summary, pageHref("team", currentLang, currentLang), site.buttons.learnMore) +
       '<div class="faculty-layout reveal">' +
       '<div class="faculty-bio">' +
       '<h3>' + escapeHtml(site.faculty.name) + "</h3>" +
@@ -139,9 +176,10 @@
   }
 
   function createPapers(site, papers, limit) {
+    var currentLang = document.body.dataset.lang || "zh";
     return (
       '<section class="content-section">' +
-      createSectionHeader("03", site.sectionLabels.updates, site.pageMeta.research.lead, site.nav[1].href, site.buttons.viewAll) +
+      createSectionHeader("03", site.sectionLabels.updates, site.pageMeta.research.lead, pageHref("research", currentLang, currentLang), site.buttons.viewAll) +
       '<div class="paper-grid">' +
       papers.slice(0, limit).map(function (item) {
         return (
@@ -149,7 +187,7 @@
           '<div class="paper-meta"><span>' + escapeHtml(item.journal || item.source) + '</span><span>' + escapeHtml(String(item.year)) + '</span><span>' + escapeHtml(item.mechanism || item.tag) + "</span></div>" +
           '<h3>' + escapeHtml(item.title) + "</h3>" +
           '<p>' + escapeHtml(item.summary) + "</p>" +
-          '<a class="text-link" href="' + item.url + '" target="_blank" rel="noreferrer">' + site.buttons.external + "</a>" +
+          '<a class="text-link" href="' + resolveSitePath(item.url) + '" target="_blank" rel="noreferrer">' + site.buttons.external + "</a>" +
           "</article>"
         );
       }).join("") +
@@ -188,10 +226,11 @@
   }
 
   function createJoinAndContact(site) {
+    var currentLang = document.body.dataset.lang || "zh";
     return (
       '<section class="content-section dual-section">' +
       '<div class="dual-panel">' +
-      createSectionHeader("04", site.sectionLabels.join, site.join.intro, site.nav[3].href, site.buttons.learnMore) +
+      createSectionHeader("04", site.sectionLabels.join, site.join.intro, pageHref("join", currentLang, currentLang), site.buttons.learnMore) +
       '<div class="callout-card reveal">' +
       '<h3>' + escapeHtml(site.join.title) + "</h3>" +
       '<div class="callout-grid">' +
@@ -199,11 +238,11 @@
         return '<article><h4>' + escapeHtml(item.title) + '</h4><p>' + escapeHtml(item.body) + "</p></article>";
       }).join("") +
       "</div>" +
-      '<a class="button button-primary" href="' + site.join.cta.href + '">' + site.join.cta.label + "</a>" +
+      '<a class="button button-primary" href="' + resolveSitePath(site.join.cta.href) + '">' + site.join.cta.label + "</a>" +
       "</div>" +
       "</div>" +
       '<div class="dual-panel">' +
-      createSectionHeader("05", site.sectionLabels.contact, site.contact.note, site.nav[4].href, site.buttons.contactUs) +
+      createSectionHeader("05", site.sectionLabels.contact, site.contact.note, pageHref("contact", currentLang, currentLang), site.buttons.contactUs) +
       '<div class="contact-stack reveal">' +
       site.contact.blocks.map(function (item) {
         return '<div class="contact-card"><span>' + escapeHtml(item.label) + '</span><strong>' + escapeHtml(item.value) + "</strong></div>";
@@ -239,7 +278,7 @@
               '<article class="paper-card reveal" data-keywords="' + escapeHtml((item.keywords || []).join("|")) + '">' +
               '<div class="paper-meta"><span>' + escapeHtml(item.journal || item.source) + '</span><span>' + escapeHtml(String(item.year)) + '</span><span>' + escapeHtml(item.mechanism || item.tag) + "</span></div>" +
               '<h3>' + escapeHtml(item.title) + '</h3><p>' + escapeHtml(item.summary) + '</p>' +
-              '<a class="text-link" href="' + item.url + '" target="_blank" rel="noreferrer">' + site.buttons.external + "</a>" +
+              '<a class="text-link" href="' + resolveSitePath(item.url) + '" target="_blank" rel="noreferrer">' + site.buttons.external + "</a>" +
               "</article>"
             );
           }).join("") +
@@ -254,7 +293,7 @@
       '<section class="content-section">' +
       createSectionHeader("01", site.sectionLabels.faculty, site.faculty.summary, null, null) +
       '<div class="team-hero reveal">' +
-      '<div class="team-photo"><img src="' + site.faculty.image + '" alt="' + escapeHtml(site.faculty.name) + '"></div>' +
+      '<div class="team-photo"><img src="' + resolveSitePath(site.faculty.image) + '" alt="' + escapeHtml(site.faculty.name) + '"></div>' +
       '<div class="team-copy"><h2>' + escapeHtml(site.faculty.name) + '</h2><p class="faculty-title">' + escapeHtml(site.faculty.title) + '</p><p>' + escapeHtml(site.faculty.summary) + '</p>' +
       '<ul class="badge-list">' + site.faculty.roles.map(function (item) { return "<li>" + escapeHtml(item) + "</li>"; }).join("") + "</ul></div>" +
       "</div></section>" +
@@ -280,6 +319,7 @@
   }
 
   function renderJoin(main, site) {
+    var currentLang = document.body.dataset.lang || "zh";
     main.innerHTML =
       '<section class="page-hero reveal"><p class="eyebrow">' + escapeHtml(site.labName) + '</p><h1>' + escapeHtml(site.pageMeta.join.title) + '</h1><p>' + escapeHtml(site.pageMeta.join.lead) + '</p></section>' +
       '<section class="content-section">' +
@@ -290,9 +330,9 @@
       }).join("") +
       '</div><ul class="plain-list checklist">' +
       site.join.checklist.map(function (item) { return "<li>" + escapeHtml(item) + "</li>"; }).join("") +
-      '</ul><a class="button button-primary" href="' + site.join.cta.href + '">' + site.join.cta.label + "</a></div></section>" +
+      '</ul><a class="button button-primary" href="' + resolveSitePath(site.join.cta.href) + '">' + site.join.cta.label + "</a></div></section>" +
       '<section class="content-section">' +
-      createSectionHeader("02", site.sectionLabels.team, site.teamSnapshot.body, site.nav[2].href, site.buttons.learnMore) +
+      createSectionHeader("02", site.sectionLabels.team, site.teamSnapshot.body, pageHref("team", currentLang, currentLang), site.buttons.learnMore) +
       '<div class="metric-band reveal">' +
       site.teamSnapshot.metrics.map(function (item) {
         return '<div class="mini-metric"><strong>' + escapeHtml(item.value) + '</strong><span>' + escapeHtml(item.label) + "</span></div>";
@@ -397,13 +437,13 @@
     var footer = document.querySelector("#site-footer");
     header.innerHTML =
       '<div class="header-shell">' +
-      '<a class="brand-lockup" href="' + site.nav[0].href + '"><span class="brand-mark">HL</span><span class="brand-text"><strong>' + escapeHtml(site.labName) + '</strong><em>' + escapeHtml(site.brand.kicker) + '</em></span></a>' +
+      '<a class="brand-lockup" href="' + pageHref("home", lang, lang) + '"><span class="brand-mark">HL</span><span class="brand-text"><strong>' + escapeHtml(site.labName) + '</strong><em>' + escapeHtml(site.brand.kicker) + '</em></span></a>' +
       '<button class="menu-toggle" data-menu-toggle aria-expanded="false" aria-label="Toggle menu"><span></span><span></span></button>' +
       '<div class="nav-shell" data-mobile-nav><nav aria-label="' + escapeHtml(site.navLabel) + '">' + createNav(site, pageKey) + '</nav>' + createLanguageSwitch(lang, pageKey, site.languageSwitchLabel) + "</div>" +
       "</div>";
     footer.innerHTML =
       '<div class="footer-shell"><p>' + escapeHtml(site.footer) + '</p><div class="footer-links">' +
-      site.nav.map(function (item) { return '<a href="' + item.href + '">' + escapeHtml(item.label) + "</a>"; }).join("") +
+      site.nav.map(function (item) { return '<a href="' + pageHref(item.key, lang, lang) + '">' + escapeHtml(item.label) + "</a>"; }).join("") +
       "</div></div>";
 
     if (pageKey === "home") {
