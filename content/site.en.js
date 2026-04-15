@@ -141,8 +141,7 @@ window.SITE_EN = {
       { label: "Postal Code", value: "510515" },
       { label: "Affiliation", value: "Division of Medical Genetics, School of Basic Medical Sciences, Southern Medical University" }
     ],
-    note:
-      "The first release uses deployment-friendly static contact blocks instead of embedded maps, making it ideal for GitHub Pages."
+    note: ""
   },
   footer:
     "Happy Lab · Southern Medical University · Epigenetics and Multi-omics of Psychiatric Disorders",

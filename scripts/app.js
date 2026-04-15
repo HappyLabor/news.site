@@ -83,13 +83,14 @@
 
   function createSectionHeader(index, title, intro, actionHref, actionLabel) {
     var action = "";
+    var introHtml = intro ? '<p>' + escapeHtml(intro) + "</p>" : "";
     if (actionHref && actionLabel) {
       action = '<a class="section-action" href="' + actionHref + '">' + actionLabel + "</a>";
     }
     return (
       '<div class="section-header reveal">' +
       '<div><p class="section-index">' + escapeHtml(index) + '</p><h2>' + escapeHtml(title) + "</h2></div>" +
-      '<div class="section-header-meta"><p>' + escapeHtml(intro) + "</p>" + action + "</div>" +
+      '<div class="section-header-meta">' + introHtml + action + "</div>" +
       "</div>"
     );
   }
@@ -300,6 +301,7 @@
   }
 
   function renderContact(main, site) {
+    var contactNote = site.contact.note ? '<p class="section-note">' + escapeHtml(site.contact.note) + "</p>" : "";
     main.innerHTML =
       '<section class="page-hero reveal"><p class="eyebrow">' + escapeHtml(site.labName) + '</p><h1>' + escapeHtml(site.pageMeta.contact.title) + '</h1><p>' + escapeHtml(site.pageMeta.contact.lead) + '</p></section>' +
       '<section class="content-section two-column">' +
@@ -307,7 +309,7 @@
       site.contact.blocks.map(function (item) {
         return '<div class="contact-card"><span>' + escapeHtml(item.label) + '</span><strong>' + escapeHtml(item.value) + "</strong></div>";
       }).join("") +
-      '</div><p class="section-note">' + escapeHtml(site.contact.note) + '</p></div>' +
+      '</div>' + contactNote + '</div>' +
       '<div class="data-card reveal"><h2>' + escapeHtml(site.faculty.name) + '</h2><p class="faculty-title">' + escapeHtml(site.faculty.title) + '</p>' +
       '<p>' + escapeHtml(site.faculty.summary) + '</p>' +
       '<div class="contact-inline"><span>' + escapeHtml(site.ui.emailLabel) + '</span><a href="mailto:' + site.faculty.email + '">' + site.faculty.email + '</a></div>' +

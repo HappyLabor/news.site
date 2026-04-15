@@ -141,8 +141,7 @@ window.SITE_ZH = {
       { label: "邮政编码", value: "510515" },
       { label: "机构归属", value: "南方医科大学基础医学院医学遗传学教研室" }
     ],
-    note:
-      "首版网站暂不接入在线地图，地址信息已按静态部署友好方式呈现，适合 GitHub Pages 直接发布。"
+    note: ""
   },
   footer:
     "Happy Lab · 南方医科大学 · 精神疾病表观遗传与多组学研究",
