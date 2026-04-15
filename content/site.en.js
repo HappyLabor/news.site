@@ -169,7 +169,11 @@ window.SITE_EN = {
     orcidLabel: "ORCID",
     careerLabel: "Career",
     recognitionLabel: "Recognition",
-    fundingLabel: "Funding"
+    fundingLabel: "Funding",
+    paperMetaSeparator: " / ",
+    mechanismLabel: "Mechanism",
+    filterAll: "All",
+    filterTitle: "Mechanism Filters"
   },
   pageMeta: {
     home: {

@@ -169,7 +169,11 @@ window.SITE_ZH = {
     orcidLabel: "ORCID",
     careerLabel: "学术经历",
     recognitionLabel: "荣誉与任职",
-    fundingLabel: "代表性课题"
+    fundingLabel: "代表性课题",
+    paperMetaSeparator: " / ",
+    mechanismLabel: "机制关键词",
+    filterAll: "全部",
+    filterTitle: "机制关键词筛选"
   },
   pageMeta: {
     home: {

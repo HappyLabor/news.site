@@ -145,9 +145,8 @@
       papers.slice(0, limit).map(function (item) {
         return (
           '<article class="paper-card reveal">' +
-          '<div class="paper-meta"><span>' + escapeHtml(String(item.year)) + '</span><span>' + escapeHtml(item.tag) + "</span></div>" +
+          '<div class="paper-meta"><span>' + escapeHtml(item.journal || item.source) + '</span><span>' + escapeHtml(String(item.year)) + '</span><span>' + escapeHtml(item.mechanism || item.tag) + "</span></div>" +
           '<h3>' + escapeHtml(item.title) + "</h3>" +
-          '<p class="paper-source">' + escapeHtml(item.source) + "</p>" +
           '<p>' + escapeHtml(item.summary) + "</p>" +
           '<a class="text-link" href="' + item.url + '" target="_blank" rel="noreferrer">' + site.buttons.external + "</a>" +
           "</article>"
@@ -155,6 +154,35 @@
       }).join("") +
       "</div>" +
       "</section>"
+    );
+  }
+
+  function getUniqueKeywords(papers) {
+    var seen = new Set();
+    var list = [];
+    papers.forEach(function (item) {
+      (item.keywords || []).forEach(function (keyword) {
+        if (!seen.has(keyword)) {
+          seen.add(keyword);
+          list.push(keyword);
+        }
+      });
+    });
+    return list;
+  }
+
+  function createFilterBar(site, papers) {
+    var keywords = getUniqueKeywords(papers);
+    return (
+      '<section class="content-section">' +
+      '<div class="filter-shell reveal">' +
+      '<div class="filter-heading"><span>' + escapeHtml(site.ui.filterTitle) + '</span><p>' + escapeHtml(site.ui.mechanismLabel + site.ui.paperMetaSeparator + site.pageMeta.research.lead) + '</p></div>' +
+      '<div class="filter-group" data-filter-group>' +
+      '<button class="filter-chip is-active" type="button" data-filter="all">' + escapeHtml(site.ui.filterAll) + "</button>" +
+      keywords.map(function (keyword) {
+        return '<button class="filter-chip" type="button" data-filter="' + escapeHtml(keyword) + '">' + escapeHtml(keyword) + "</button>";
+      }).join("") +
+      "</div></div></section>"
     );
   }
 
@@ -193,6 +221,7 @@
     var yearIndex = Array.from(new Set(papers.map(function (item) { return item.year; }))).sort(function (a, b) { return b - a; });
     main.innerHTML =
       '<section class="page-hero reveal"><p class="eyebrow">' + escapeHtml(site.labName) + '</p><h1>' + escapeHtml(site.pageMeta.research.title) + '</h1><p>' + escapeHtml(site.pageMeta.research.lead) + '</p></section>' +
+      createFilterBar(site, papers) +
       '<section class="content-section"><div class="year-filter reveal">' +
       yearIndex.map(function (year) {
         return '<a href="#year-' + year + '">' + year + "</a>";
@@ -203,12 +232,12 @@
         return (
           '<section class="content-section" id="year-' + year + '">' +
           createSectionHeader(String(index + 1).padStart(2, "0"), String(year), site.sectionLabels.updates, null, null) +
-          '<div class="paper-grid">' +
+          '<div class="paper-grid" data-paper-grid>' +
           group.map(function (item) {
             return (
-              '<article class="paper-card reveal">' +
-              '<div class="paper-meta"><span>' + escapeHtml(String(item.year)) + '</span><span>' + escapeHtml(item.tag) + "</span></div>" +
-              '<h3>' + escapeHtml(item.title) + '</h3><p class="paper-source">' + escapeHtml(item.source) + '</p><p>' + escapeHtml(item.summary) + '</p>' +
+              '<article class="paper-card reveal" data-keywords="' + escapeHtml((item.keywords || []).join("|")) + '">' +
+              '<div class="paper-meta"><span>' + escapeHtml(item.journal || item.source) + '</span><span>' + escapeHtml(String(item.year)) + '</span><span>' + escapeHtml(item.mechanism || item.tag) + "</span></div>" +
+              '<h3>' + escapeHtml(item.title) + '</h3><p>' + escapeHtml(item.summary) + '</p>' +
               '<a class="text-link" href="' + item.url + '" target="_blank" rel="noreferrer">' + site.buttons.external + "</a>" +
               "</article>"
             );
@@ -316,6 +345,43 @@
     });
   }
 
+  function initResearchFilter() {
+    var filterGroup = document.querySelector("[data-filter-group]");
+    if (!filterGroup) {
+      return;
+    }
+    var chips = Array.from(filterGroup.querySelectorAll("[data-filter]"));
+    var cards = Array.from(document.querySelectorAll("[data-keywords]"));
+    var sections = Array.from(document.querySelectorAll("[id^='year-']"));
+
+    function applyFilter(value) {
+      chips.forEach(function (chip) {
+        chip.classList.toggle("is-active", chip.dataset.filter === value);
+      });
+
+      cards.forEach(function (card) {
+        var keywords = (card.dataset.keywords || "").split("|").filter(Boolean);
+        var visible = value === "all" || keywords.indexOf(value) !== -1;
+        card.style.display = visible ? "" : "none";
+      });
+
+      sections.forEach(function (section) {
+        var visibleCards = Array.from(section.querySelectorAll("[data-keywords]")).filter(function (card) {
+          return card.style.display !== "none";
+        });
+        section.style.display = visibleCards.length ? "" : "none";
+      });
+    }
+
+    filterGroup.addEventListener("click", function (event) {
+      var chip = event.target.closest("[data-filter]");
+      if (!chip) {
+        return;
+      }
+      applyFilter(chip.dataset.filter);
+    });
+  }
+
   function initPage() {
     var root = document.body;
     var lang = root.dataset.lang || "zh";
@@ -351,6 +417,7 @@
     }
 
     initMenu();
+    initResearchFilter();
     initReveal();
   }
 
